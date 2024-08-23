@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Youtube.Core\YoutubeBlog.Core.csproj" />
+  </ItemGroup>
+
 </Project>
