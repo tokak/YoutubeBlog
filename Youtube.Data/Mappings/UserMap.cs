@@ -60,9 +60,11 @@ namespace YoutubeBlog.Data.Mappings
                 LastName = "Tokak",
                 PhoneNumberConfirmed = true,
                 EmailConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                ImageId = Guid.Parse("74B00590-B51B-4AA5-B8EC-D0CA2F719312")
+
             };
-            superadmin.PasswordHash = CreatePasswordHash(superadmin,"123456");
+            superadmin.PasswordHash = CreatePasswordHash(superadmin, "123456");
 
             var admin = new AppUser
             {
@@ -75,11 +77,12 @@ namespace YoutubeBlog.Data.Mappings
                 LastName = "User",
                 PhoneNumberConfirmed = false,
                 EmailConfirmed = false,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                ImageId = Guid.Parse("6D559AF3-1246-4DB4-9E14-FEA3909C18F8")
             };
             admin.PasswordHash = CreatePasswordHash(admin, "123456");
 
-            builder.HasData(superadmin,admin);
+            builder.HasData(superadmin, admin);
 
         }
         private string CreatePasswordHash(AppUser user, string password)
