@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YoutubeBlog.Data.Context;
 
@@ -11,9 +12,11 @@ using YoutubeBlog.Data.Context;
 namespace YoutubeBlog.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240823184212_Initial2")]
+    partial class Initial2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +65,8 @@ namespace YoutubeBlog.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
@@ -74,36 +78,6 @@ namespace YoutubeBlog.Data.Migrations
                     b.HasIndex("ImageId");
 
                     b.ToTable("Artices");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("1a7634dd-7086-493d-aefa-7071f67537d1"),
-                            CategoryId = new Guid("ffa95fc9-78f4-4416-bd29-7be73e398962"),
-                            Content = "Test açıklamasıdır",
-                            CreatedBy = "Admin test",
-                            CreatedDate = new DateTime(2024, 8, 23, 22, 25, 9, 562, DateTimeKind.Local).AddTicks(114),
-                            DeletedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ImageId = new Guid("74b00590-b51b-4aa5-b8ec-d0ca2f719312"),
-                            IsDeleted = false,
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Asp.net Core Deneme Makalesi",
-                            ViewCount = 15
-                        },
-                        new
-                        {
-                            Id = new Guid("339991f4-54e6-45c8-a6f1-c5ff3266b278"),
-                            CategoryId = new Guid("4c26487e-82be-4650-bf33-f50edd724829"),
-                            Content = "Test2  açıklamasıdır",
-                            CreatedBy = "Admin test2",
-                            CreatedDate = new DateTime(2024, 8, 23, 22, 25, 9, 562, DateTimeKind.Local).AddTicks(119),
-                            DeletedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ImageId = new Guid("6d559af3-1246-4db4-9e14-fea3909c18f8"),
-                            IsDeleted = false,
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Asp.net Core Deneme Makalesi 2",
-                            ViewCount = 15
-                        });
                 });
 
             modelBuilder.Entity("YoutubeBlog.Entity.Entities.Category", b =>
@@ -141,28 +115,6 @@ namespace YoutubeBlog.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("ffa95fc9-78f4-4416-bd29-7be73e398962"),
-                            CreatedBy = "Admin test",
-                            CreatedDate = new DateTime(2024, 8, 23, 22, 25, 9, 562, DateTimeKind.Local).AddTicks(985),
-                            DeletedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = " Asp. Net Core"
-                        },
-                        new
-                        {
-                            Id = new Guid("4c26487e-82be-4650-bf33-f50edd724829"),
-                            CreatedBy = "Admin2 test2",
-                            CreatedDate = new DateTime(2024, 8, 23, 22, 25, 9, 562, DateTimeKind.Local).AddTicks(988),
-                            DeletedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = " Asp. Net Core2"
-                        });
                 });
 
             modelBuilder.Entity("YoutubeBlog.Entity.Entities.Image", b =>
@@ -204,30 +156,6 @@ namespace YoutubeBlog.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Images");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("74b00590-b51b-4aa5-b8ec-d0ca2f719312"),
-                            CreatedBy = "Admin test",
-                            CreatedDate = new DateTime(2024, 8, 23, 22, 25, 9, 562, DateTimeKind.Local).AddTicks(1562),
-                            DeletedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FileName = "images/test",
-                            FileType = "jpg",
-                            IsDeleted = false,
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = new Guid("6d559af3-1246-4db4-9e14-fea3909c18f8"),
-                            CreatedBy = "Admin test2",
-                            CreatedDate = new DateTime(2024, 8, 23, 22, 25, 9, 562, DateTimeKind.Local).AddTicks(1565),
-                            DeletedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FileName = "images/test2",
-                            FileType = "png",
-                            IsDeleted = false,
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("YoutubeBlog.Entity.Entities.Artice", b =>
