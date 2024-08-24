@@ -11,6 +11,6 @@ namespace YoutubeBlog.Entity.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Artice> Artices { get; set; }
+        public ICollection<Article> Artices { get; set; }
     }
 }

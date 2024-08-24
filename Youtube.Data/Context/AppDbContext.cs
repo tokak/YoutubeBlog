@@ -12,14 +12,14 @@ namespace YoutubeBlog.Data.Context
 {
     public class AppDbContext : DbContext
     {
-        protected AppDbContext()
+        public AppDbContext()
         {
         }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
-        public DbSet<Artice> Artices { get; set; }
+        public DbSet<Article> Artices { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Category> Categories { get; set; }
 

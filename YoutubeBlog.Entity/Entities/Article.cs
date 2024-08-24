@@ -3,7 +3,7 @@
 namespace YoutubeBlog.Entity.Entities
 {
     //Makale Sınıfı
-    public class Artice : EntityBase
+    public class Article : EntityBase
     {
         public string Title { get; set; }
         public string Content { get; set; }

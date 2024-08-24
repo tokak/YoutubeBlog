@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using YoutubeBlog.Data.Context;
 using YoutubeBlog.Web.Models;
 
 namespace YoutubeBlog.Web.Controllers
@@ -15,6 +16,7 @@ namespace YoutubeBlog.Web.Controllers
 
         public IActionResult Index()
         {
+            AppDbContext appDbContext = new AppDbContext();
             return View();
         }
 

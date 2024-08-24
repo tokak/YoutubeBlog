@@ -4,16 +4,16 @@ using YoutubeBlog.Entity.Entities;
 
 namespace YoutubeBlog.Data.Mappings
 {
-    public class ArticleMap : IEntityTypeConfiguration<Artice>
+    public class ArticleMap : IEntityTypeConfiguration<Article>
     {
-        public void Configure(EntityTypeBuilder<Artice> builder)
+        public void Configure(EntityTypeBuilder<Article> builder)
         {
             //builder.Property(x => x.Title).IsRequired();
             //builder.Property(x => x.Title).HasMaxLength(150);
 
             //Test dataları ekleme
             builder.HasData(
-                new Artice
+                new Article
                 {
                     Id = Guid.NewGuid(),
                     Title = "Asp.net Core Deneme Makalesi",
@@ -26,7 +26,7 @@ namespace YoutubeBlog.Data.Mappings
                     IsDeleted = false
                 },
 
-                new Artice
+                new Article
                 {
                     Id = Guid.NewGuid(),
                     Title = "Asp.net Core Deneme Makalesi 2",
