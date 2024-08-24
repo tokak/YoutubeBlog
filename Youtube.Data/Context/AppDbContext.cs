@@ -1,16 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using YoutubeBlog.Data.Mappings;
 using YoutubeBlog.Entity.Entities;
 
 namespace YoutubeBlog.Data.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, AppUserClaim, AppUserRole, AppUserLogin, AppRoleClaim, AppUserToken>
     {
         public AppDbContext()
         {
@@ -25,6 +20,8 @@ namespace YoutubeBlog.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             //Kullanım şekillleri
             //modelBuilder.Entity<Artice>().Property(x=>x.Title).HasMaxLength(50);
             //modelBuilder.ApplyConfiguration(new ArticleMap()); kullanmak yerine !
