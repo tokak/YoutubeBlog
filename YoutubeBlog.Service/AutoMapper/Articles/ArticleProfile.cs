@@ -2,7 +2,7 @@
 using YoutubeBlog.Entity.DTOs.Articles;
 using YoutubeBlog.Entity.Entities;
 
-namespace YoutubeBlog.Service.AutoMapper
+namespace YoutubeBlog.Service.AutoMapper.Articles
 {
     public class ArticleProfile : Profile
     {
