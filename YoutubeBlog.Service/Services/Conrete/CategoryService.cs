@@ -26,7 +26,6 @@ namespace YoutubeBlog.Service.Services.Conrete
             var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
             var map = _mapper.Map<List<CategoryDto>>(categories);
             return map;
-
         }
     }
 }

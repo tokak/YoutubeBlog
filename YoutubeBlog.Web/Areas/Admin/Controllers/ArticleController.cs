@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeBlog.Entity.DTOs.Articles;
+using YoutubeBlog.Entity.Entities;
 using YoutubeBlog.Service.Services.Abstractions;
 
 namespace YoutubeBlog.Web.Areas.Admin.Controllers
@@ -11,11 +13,13 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
     {
         private readonly IArticleService _articleService;
         private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
 
-        public ArticleController(IArticleService articleService, ICategoryService categoryService)
+        public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper)
         {
             _articleService = articleService;
             _categoryService = categoryService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -35,7 +39,32 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         {
             await _articleService.CreateArticleAsync(articleAddDto);
 
-            return RedirectToAction("Index","Article",new {Area="Admin"});
+            RedirectToAction("Index","Article",new {Area="Admin"});
+
+            var categories = await _categoryService.GetAllCategoriesNonDeleted();
+            return View(new ArticleAddDto { Categories = categories });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid articleId)
+        {
+            var article = await _articleService.GetArticlesWithCategoryNonDeletedAsync(articleId);
+            var categories = await _categoryService.GetAllCategoriesNonDeleted();
+            var articleUpdateDto = _mapper.Map<ArticleUpdateDto>(article);
+           articleUpdateDto.Categories = categories;
+            return View(articleUpdateDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(ArticleUpdateDto articleUpdateDto)
+        {
+            await _articleService.UpdateArticleAsync(articleUpdateDto);
+            RedirectToAction("Index", "Article", new { Area = "Admin" });
+
+            //bir hata durumunda yazılan verileri gösterme
+            var categories = await _categoryService.GetAllCategoriesNonDeleted();
+            articleUpdateDto.Categories = categories;
+            return View(articleUpdateDto);
         }
     }
 }

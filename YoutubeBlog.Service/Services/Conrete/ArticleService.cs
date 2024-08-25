@@ -27,14 +27,35 @@ namespace YoutubeBlog.Service.Services.Conrete
                 UserId = userId
             };
             await _unitOfWork.GetRepository<Article>().AddAsync(article);
-            await _unitOfWork.SaveAsync(); 
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<List<ArticleDto>> GetAllArticlesWithCategoryNonDeletedAsync()
         {
-            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted == false,x=>x.Category);
+            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted == false, x => x.Category);
             var map = _mapper.Map<List<ArticleDto>>(articles);
             return map;
+        }
+
+        public async Task<ArticleDto> GetArticlesWithCategoryNonDeletedAsync(Guid articleId)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category);
+            var map = _mapper.Map<ArticleDto>(article);
+            return map;
+        }
+
+        public async Task UpdateArticleAsync(ArticleUpdateDto articleUpdateDto)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category);
+           //_mapper.Map<ArticleUpdateDto>(article);
+           article.Title =articleUpdateDto.Title;
+           article.Content =articleUpdateDto.Content;
+           article.CategoryId =articleUpdateDto.CategoryId;
+            
+
+            await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+
+            await _unitOfWork.SaveAsync();
         }
     }
 }
