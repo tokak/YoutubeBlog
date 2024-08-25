@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeBlog.Entity.DTOs.Articles;
@@ -14,12 +16,13 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         private readonly IArticleService _articleService;
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
-
-        public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper)
+        private readonly IValidator _validator;
+        public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper, IValidator<Article> validator)
         {
             _articleService = articleService;
             _categoryService = categoryService;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<IActionResult> Index()
@@ -30,6 +33,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
+          
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
             return View(new ArticleAddDto { Categories = categories });
         }
@@ -37,12 +41,26 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ArticleAddDto articleAddDto)
         {
-            await _articleService.CreateArticleAsync(articleAddDto);
+            var map = _mapper.Map<Article>(articleAddDto);
+            //var result = await _validator.Validate(map);
+            var context = new ValidationContext<Article>(map);
+            var result = await _validator.ValidateAsync(context);
 
-            RedirectToAction("Index", "Article", new { Area = "Admin" });
+            if (result.IsValid)
+            {
+                await _articleService.CreateArticleAsync(articleAddDto);
+               return RedirectToAction("Index", "Article", new { Area = "Admin" });
+            }
+            else
+            {
+                result.AddToModelState(this.ModelState);
+                var categories = await _categoryService.GetAllCategoriesNonDeleted();
+                return View(new ArticleAddDto { Categories = categories });
 
-            var categories = await _categoryService.GetAllCategoriesNonDeleted();
-            return View(new ArticleAddDto { Categories = categories });
+            }
+
+
+            
         }
 
         [HttpGet]
@@ -58,13 +76,27 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(ArticleUpdateDto articleUpdateDto)
         {
-            await _articleService.UpdateArticleAsync(articleUpdateDto);
-            RedirectToAction("Index", "Article", new { Area = "Admin" });
 
-            //bir hata durumunda yazılan verileri gösterme
-            var categories = await _categoryService.GetAllCategoriesNonDeleted();
-            articleUpdateDto.Categories = categories;
-            return View(articleUpdateDto);
+            var map = _mapper.Map<Article>(articleUpdateDto);
+            //var result = await _validator.Validate(map);
+            var context = new ValidationContext<Article>(map);
+            var result = await _validator.ValidateAsync(context);
+
+            if (result.IsValid)
+            {
+                await _articleService.UpdateArticleAsync(articleUpdateDto);
+                return RedirectToAction("Index", "Article", new { Area = "Admin" });
+            }
+            else
+            {
+                result.AddToModelState(this.ModelState);
+                //bir hata durumunda yazılan verileri gösterme
+                var categories = await _categoryService.GetAllCategoriesNonDeleted();
+                articleUpdateDto.Categories = categories;
+                return View(articleUpdateDto);
+            }
+
+            
         }
 
         public async Task<IActionResult> Delete(Guid articleId)
