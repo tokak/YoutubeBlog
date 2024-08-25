@@ -31,7 +31,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Add()
         {
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
-            return View(new ArticleAddDto {Categories = categories });
+            return View(new ArticleAddDto { Categories = categories });
         }
 
         [HttpPost]
@@ -39,7 +39,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         {
             await _articleService.CreateArticleAsync(articleAddDto);
 
-            RedirectToAction("Index","Article",new {Area="Admin"});
+            RedirectToAction("Index", "Article", new { Area = "Admin" });
 
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
             return View(new ArticleAddDto { Categories = categories });
@@ -51,7 +51,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
             var article = await _articleService.GetArticlesWithCategoryNonDeletedAsync(articleId);
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
             var articleUpdateDto = _mapper.Map<ArticleUpdateDto>(article);
-           articleUpdateDto.Categories = categories;
+            articleUpdateDto.Categories = categories;
             return View(articleUpdateDto);
         }
 
@@ -65,6 +65,12 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
             articleUpdateDto.Categories = categories;
             return View(articleUpdateDto);
+        }
+
+        public async Task<IActionResult> Delete(Guid articleId)
+        {
+            await _articleService.SafeDeleteArticleAsync(articleId);
+            return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
     }
 }

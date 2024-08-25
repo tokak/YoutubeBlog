@@ -15,5 +15,6 @@ namespace YoutubeBlog.Service.Services.Abstractions
 
         Task UpdateArticleAsync(ArticleUpdateDto articleUpdateDto);
         Task CreateArticleAsync(ArticleAddDto articleAddDto);
+        Task SafeDeleteArticleAsync(Guid articleId);
     }
 }
