@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Reflection;
 using YoutubeBlog.Service.FluentValidations;
+using YoutubeBlog.Service.Helpers.Image;
 using YoutubeBlog.Service.Services.Abstractions;
 using YoutubeBlog.Service.Services.Conrete;
 
@@ -18,7 +19,7 @@ namespace YoutubeBlog.Service.Extensions
 
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
-
+            services.AddScoped<IImageHelper, ImageHelper>();
             //Login olan kullanıcıyı bulma
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
