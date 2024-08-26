@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Reflection;
@@ -17,6 +18,10 @@ namespace YoutubeBlog.Service.Extensions
 
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
+
+            //Login olan kullanıcıyı bulma
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddAutoMapper(assembly);
 
           
