@@ -27,6 +27,8 @@ namespace YoutubeBlog.Service.Extensions
 
           
 
+
+            //Bir sınıf için tanımlamamız yeterlidir.
             services.AddControllersWithViews()
               .AddFluentValidation(opt =>
               {
