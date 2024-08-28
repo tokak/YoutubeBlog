@@ -36,6 +36,23 @@
             }
         }
 
+        public static class User
+        {
+            public static string Add(string userTitle)
+            {
+                return $"{userTitle} kullanıcısı başarıyla eklenmiştir";
+            }
+            public static string Update(string userTitle)
+            {
+                return $"{userTitle} kullanıcısı  başarıyla güncellenmiştir";
+            }
+
+            public static string Delete(string userTitle)
+            {
+                return $"{userTitle} kullanıcı kaydı başarıyla silinmiştir";
+            }
+        }
+
 
 
     }
