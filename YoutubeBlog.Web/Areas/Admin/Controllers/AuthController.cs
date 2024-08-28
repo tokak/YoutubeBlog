@@ -52,10 +52,19 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
             return View();
         }
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home", new { Area = "" });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> AccessDenied()
+        {
+            //Erişim engeline takılırsa sayfa gösterilecek
+            return View();
         }
     }
 }

@@ -17,6 +17,10 @@
             {
                 return $"{articleTitle} başlıklı makale başarıyla silinmiştir";
             }
+            public static string UndoDelete(string articleTitle)
+            {
+                return $"{articleTitle} başlıklı makale başarıyla geri alınmıştır";
+            }
         }
 
         public static class Category
@@ -33,6 +37,10 @@
             public static string Delete(string categoryTitle)
             {
                 return $"{categoryTitle} başlıklı katogori başarıyla silinmiştir";
+            }
+            public static string UndoDelete(string categoryTitle)
+            {
+                return $"{categoryTitle} başlıklı katogori başarıyla geri alınmıştır.";
             }
         }
 

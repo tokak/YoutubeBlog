@@ -28,13 +28,22 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
             _validator = validator;
             _toastNotification = toastNotification;
         }
-
+        [HttpGet]
+        [Authorize(Roles ="Superadmin,Admin,User")]
         public async Task<IActionResult> Index()
         {
             var articles = await _articleService.GetAllArticlesWithCategoryNonDeletedAsync();
             return View(articles);
         }
         [HttpGet]
+        [Authorize(Roles = "Superadmin,Admin")]
+        public async Task<IActionResult> DeletedArticle()
+        {
+            var articles = await _articleService.GetAllArticlesWithCategoryDeletedAsync();
+            return View(articles);
+        }
+        [HttpGet]
+        [Authorize(Roles = "Superadmin,Admin")]
         public async Task<IActionResult> Add()
         {
 
@@ -43,6 +52,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Superadmin,Admin")]
         public async Task<IActionResult> Add(ArticleAddDto articleAddDto)
         {
             var map = _mapper.Map<Article>(articleAddDto);
@@ -61,14 +71,11 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
                 result.AddToModelState(this.ModelState);
                 var categories = await _categoryService.GetAllCategoriesNonDeleted();
                 return View(new ArticleAddDto { Categories = categories });
-
             }
-
-
-
         }
 
         [HttpGet]
+        [Authorize(Roles = "Superadmin,Admin")]
         public async Task<IActionResult> Update(Guid articleId)
         {
             var article = await _articleService.GetArticlesWithCategoryNonDeletedAsync(articleId);
@@ -79,6 +86,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Superadmin,Admin")]
         public async Task<IActionResult> Update(ArticleUpdateDto articleUpdateDto)
         {
 
@@ -102,12 +110,21 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
                 return View(articleUpdateDto);
             }
         }
-
+        [Authorize(Roles = "Superadmin,Admin")]
         public async Task<IActionResult> Delete(Guid articleId)
         {
             var title = await _articleService.SafeDeleteArticleAsync(articleId);
             _toastNotification.AddSuccessToastMessage(Messages.Article.Delete(title), new ToastrOptions { Title = "Başarılı", });
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
+        [Authorize(Roles = "Superadmin,Admin")]
+        public async Task<IActionResult> UndoDelete(Guid articleId)
+        {
+            var title = await _articleService.UndoDeleteArticleAsync(articleId);
+            _toastNotification.AddSuccessToastMessage(Messages.Article.UndoDelete(title), new ToastrOptions { Title = "Başarılı", });
+            return RedirectToAction("Index", "Article", new { Area = "Admin" });
+        }
+
+
     }
 }

@@ -84,5 +84,26 @@ namespace YoutubeBlog.Service.Services.Conrete
 
             return category.Name;
         }
+
+        public async Task<List<CategoryDto>> GetAllCategoriesDeleted()
+        {
+            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x=>x.IsDeleted);
+            var map = _mapper.Map<List<CategoryDto>>(categories);
+            return map;
+        }
+
+        public async Task<string> UndoDeleteCategoryAsync(Guid categoryId)
+        {
+            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+
+            category.IsDeleted = false;
+            category.DeletedDate = null;
+            category.DeletedBy = null;
+
+            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+            await _unitOfWork.SaveAsync();
+
+            return category.Name;
+        }
     }
 }

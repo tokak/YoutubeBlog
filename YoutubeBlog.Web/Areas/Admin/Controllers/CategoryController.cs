@@ -35,6 +35,13 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
             return View(categories);
         }
         [HttpGet]
+        public async Task<IActionResult> DeletedCategory()
+        {
+            var categories = await _categoryService.GetAllCategoriesDeleted();
+            return View(categories);
+        }
+
+        [HttpGet]
         public IActionResult Add()
         {
             return View(new CategoryAddDto { });
@@ -110,6 +117,15 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
 
             return RedirectToAction("Index", "Category", new { Area = "Admin" });
         }
+
+        public async Task<IActionResult> UndoDeleted(Guid categoryId)
+        {
+            var name = await _categoryService.SafeDeleteCategoryAsync(categoryId);
+            _toastNotification.AddSuccessToastMessage(Messages.Category.UndoDelete(name), new ToastrOptions() { Title = "İşlem Başarılı" });
+
+            return RedirectToAction("Index", "Category", new { Area = "Admin" });
+        }
+
 
 
     }

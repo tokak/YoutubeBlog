@@ -16,5 +16,7 @@ namespace YoutubeBlog.Service.Services.Abstractions
         Task<Category> GetCategoryByGuid(Guid id);
         Task<string> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto);
         Task<string> SafeDeleteCategoryAsync(Guid categoryId);
+        Task<List<CategoryDto>> GetAllCategoriesDeleted();
+        Task<string> UndoDeleteCategoryAsync(Guid categoryId);
     }
 }
