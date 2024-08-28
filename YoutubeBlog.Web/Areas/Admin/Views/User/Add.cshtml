@@ -14,35 +14,35 @@
 
                         <div class="form-group">
                             <label asp-for="FirstName" class="form-label">Kullanıcı ismi</label>
-                            <input asp-for="FirstName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının İsmini Giriniz" aria-describedby="defaultFormControlHelp" required>
+                            <input asp-for="FirstName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının İsmini Giriniz" aria-describedby="defaultFormControlHelp" >
                         </div>
 
                         <div class="form-group">
                             <label asp-for="LastName" class="form-label">Kullanıcı soyadı</label>
-                            <input asp-for="LastName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının Soyadını Giriniz" aria-describedby="defaultFormControlHelp" required>
+                            <input asp-for="LastName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının Soyadını Giriniz" aria-describedby="defaultFormControlHelp" >
 
                         </div>
 
                         <div class="form-group">
                             <label asp-for="Email" class="form-label">Kullanıcı email</label>
-                            <input asp-for="Email" type="email" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının Email Adresini Giriniz" aria-describedby="defaultFormControlHelp" required>
+                            <input asp-for="Email" type="email" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının Email Adresini Giriniz" aria-describedby="defaultFormControlHelp" >
 
                         </div>
 
                         <div class="form-group">
                             <label asp-for="PhoneNumber" class="form-label">Kullanıcı Telefon Numarası</label>
-                            <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının Telefon Numarasını Giriniz" pattern="\+?[0-9]{10,15}" aria-describedby="defaultFormControlHelp" required>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control mb-3" id="defaultFormControlInput" placeholder="Lütfen Kullanıcının Telefon Numarasını Giriniz" pattern="\+?[0-9]{10,15}" aria-describedby="defaultFormControlHelp" >
 
                         </div>
                         <div class="form-group">
                             <label asp-for="RoleId" class="form-label">Kullanıcı Rolü</label>
-                            <select asp-for="RoleId" class="form-control mb-3" asp-items="@(new SelectList(Model.Roles,"Id","Name"))" required></select>
+                            <select asp-for="RoleId" class="form-control mb-3" asp-items="@(new SelectList(Model.Roles,"Id","Name"))" ></select>
 
 
                         </div>
                         <div class="form-group">
                             <label asp-for="Password" class="form-label">Kullanıcı Parolası</label>
-                            <input asp-for="Password" type="password" class="form-control mb-3" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp" required>
+                            <input asp-for="Password" type="password" class="form-control mb-3" id="defaultFormControlInput" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="defaultFormControlHelp" >
                         </div>
                        
 

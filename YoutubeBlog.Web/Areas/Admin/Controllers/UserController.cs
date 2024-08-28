@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
-using System.Data;
-using YoutubeBlog.Entity.DTOs.Categories;
 using YoutubeBlog.Entity.DTOs.Users;
 using YoutubeBlog.Entity.Entities;
 using YoutubeBlog.Web.ResultMessages;
@@ -18,14 +17,16 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IToastNotification _toastNotification;
+        private readonly IValidator<AppUser> _validator;
         private readonly IMapper _mapper;
 
-        public UserController(UserManager<AppUser> userManager, IMapper mapper, RoleManager<AppRole> roleManager, IToastNotification toastNotification)
+        public UserController(UserManager<AppUser> userManager, IMapper mapper, RoleManager<AppRole> roleManager, IToastNotification toastNotification, IValidator<AppUser> validator)
         {
             _userManager = userManager;
             _mapper = mapper;
             _roleManager = roleManager;
             _toastNotification = toastNotification;
+            _validator = validator;
         }
 
         public async Task<IActionResult> Index()
@@ -52,6 +53,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         {
             //Kullanıcı rolü ile beraber ekleme işlemi
             var map = _mapper.Map<AppUser>(userAddDto);
+            var validation = await _validator.ValidateAsync(map);
             var roles = await _roleManager.Roles.ToListAsync();
             if (ModelState.IsValid)
             {
@@ -69,7 +71,9 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
+                       
                     }
+                    validation.AddToModelState(this.ModelState);
                     return View(new UserAddDto { Roles = roles });
                 }
             }
@@ -96,11 +100,21 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
                 var roles = await _roleManager.Roles.ToListAsync();
                 if (ModelState.IsValid)
                 {
+                
                     user.FirstName = userUpdateDto.FirstName;
                     user.LastName = userUpdateDto.LastName;
                     user.Email = userUpdateDto.Email;
                     user.UserName = userUpdateDto.Email;
+                    user.PhoneNumber = userUpdateDto.PhoneNumber;
                     user.SecurityStamp = Guid.NewGuid().ToString();
+
+                    var validation = await _validator.ValidateAsync(user);
+
+                    if (!validation.IsValid)
+                    {
+                        validation.AddToModelState(this.ModelState);
+                        return View(new UserUpdateDto { Roles = roles });
+                    }
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
@@ -117,7 +131,8 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
                         {
                             ModelState.AddModelError("", error.Description);
                         }
-                        return View(new UserUpdateDto { Roles = roles });
+                        //result.AddToIdentityModelState(this.ModelState);
+
                     }
                 }
             }
@@ -141,6 +156,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
                     {
                         ModelState.AddModelError("", error.Description);
                     }
+                    //result.AddToIdentityModelState(this.ModelState);
                     return NotFound();
                 }
             }
