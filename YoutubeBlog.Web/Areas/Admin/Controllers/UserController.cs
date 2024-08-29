@@ -8,7 +8,6 @@ using NToastNotify;
 using YoutubeBlog.Entity.DTOs.Users;
 using YoutubeBlog.Entity.Entities;
 using YoutubeBlog.Service.Services.Abstractions;
-using YoutubeBlog.Service.Services.Conrete;
 using YoutubeBlog.Web.ResultMessages;
 
 namespace YoutubeBlog.Web.Areas.Admin.Controllers
@@ -36,6 +35,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
+            //users userDto dönüştürdüüğünü ve liste olarak sakladıgını belirtir.
             var map = _mapper.Map<List<UserDto>>(users);
             foreach (var item in map)
             {
