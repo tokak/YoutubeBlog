@@ -7,6 +7,7 @@ using NToastNotify;
 using YoutubeBlog.Entity.DTOs.Articles;
 using YoutubeBlog.Entity.Entities;
 using YoutubeBlog.Service.Services.Abstractions;
+using YoutubeBlog.Web.Consts;
 using YoutubeBlog.Web.ResultMessages;
 
 namespace YoutubeBlog.Web.Areas.Admin.Controllers
@@ -29,21 +30,21 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
             _toastNotification = toastNotification;
         }
         [HttpGet]
-        [Authorize(Roles ="Superadmin,Admin,User")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin},{RoleConsts.User}")]
         public async Task<IActionResult> Index()
         {
             var articles = await _articleService.GetAllArticlesWithCategoryNonDeletedAsync();
             return View(articles);
         }
         [HttpGet]
-        [Authorize(Roles = "Superadmin,Admin")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> DeletedArticle()
         {
             var articles = await _articleService.GetAllArticlesWithCategoryDeletedAsync();
             return View(articles);
         }
         [HttpGet]
-        [Authorize(Roles = "Superadmin,Admin")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Add()
         {
 
@@ -52,7 +53,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Superadmin,Admin")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Add(ArticleAddDto articleAddDto)
         {
             var map = _mapper.Map<Article>(articleAddDto);
@@ -75,7 +76,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Superadmin,Admin")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Update(Guid articleId)
         {
             var article = await _articleService.GetArticlesWithCategoryNonDeletedAsync(articleId);
@@ -86,7 +87,7 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Superadmin,Admin")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Update(ArticleUpdateDto articleUpdateDto)
         {
 
@@ -110,14 +111,14 @@ namespace YoutubeBlog.Web.Areas.Admin.Controllers
                 return View(articleUpdateDto);
             }
         }
-        [Authorize(Roles = "Superadmin,Admin")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Delete(Guid articleId)
         {
             var title = await _articleService.SafeDeleteArticleAsync(articleId);
             _toastNotification.AddSuccessToastMessage(Messages.Article.Delete(title), new ToastrOptions { Title = "Başarılı", });
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
-        [Authorize(Roles = "Superadmin,Admin")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> UndoDelete(Guid articleId)
         {
             var title = await _articleService.UndoDeleteArticleAsync(articleId);

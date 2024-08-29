@@ -1,4 +1,4 @@
-﻿@* @using YoutubeBlog.Web.Consts *@
+﻿@using YoutubeBlog.Web.Consts 
 @model List<ArticleDto>
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -10,7 +10,7 @@
     <div class="card ">
         <div class="table-responsive text-nowrap">
             @{
-                @if (!User.IsInRole("User"))
+                @if (!User.IsInRole(RoleConsts.User))
                 {
                     <a class="btn btn-outline-danger" style="margin:25px" asp-area="Admin" asp-controller="Article" asp-action="Add">
                         Makale Ekle
@@ -28,7 +28,7 @@
                         <th>Oluşturan</th>
                         <th>Durum</th>
                         @{
-                            @if (!User.IsInRole("User"))
+                            @if (!User.IsInRole(RoleConsts.User))
                             {
                                 <th>İşlemler</th>
                             }
@@ -44,7 +44,7 @@
                         <th>Oluşturan</th>
                         <th>Durum</th>
                         @{
-                            @if (!User.IsInRole("User"))
+                            @if (!User.IsInRole(RoleConsts.User))
                             {
                                 <th>İşlemler</th>
                             }
@@ -61,7 +61,7 @@
                             <td>@article.CreatedBy</td>
                             <td>@(article.IsDeleted ? "Aktif Değil" : "Aktif")</td>
                             @{
-                                @if (!User.IsInRole("User"))
+                                @if (!User.IsInRole(RoleConsts.User))
                                 {
                                     <td>
                                         <a class="btn btn-outline-primary btn-sm" data-id="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="Update" asp-route-articleId="@article.Id">
