@@ -61,7 +61,13 @@ namespace YoutubeBlog.Service.Services.Conrete
 
         public async Task<List<ArticleDto>> GetAllArticlesWithCategoryNonDeletedAsync()
         {
-            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted == false, x => x.Category);
+            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted == false, x => x.Category,x=>x.Image);
+            var map = _mapper.Map<List<ArticleDto>>(articles);
+            return map;
+        }
+        public async Task<List<ArticleDto>> GetAllArticlesWithCategoryDeletedAsync()
+        {
+            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted, x => x.Category);
             var map = _mapper.Map<List<ArticleDto>>(articles);
             return map;
         }
@@ -120,12 +126,7 @@ namespace YoutubeBlog.Service.Services.Conrete
             return article.Title;
         }
 
-        public async Task<List<ArticleDto>> GetAllArticlesWithCategoryDeletedAsync()
-        {
-            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted, x => x.Category);
-            var map = _mapper.Map<List<ArticleDto>>(articles);
-            return map;
-        }
+   
 
         public async Task<string> UndoDeleteArticleAsync(Guid articleId)
         {
@@ -148,11 +149,10 @@ namespace YoutubeBlog.Service.Services.Conrete
             pageSize = pageSize > 20 ? 20 : pageSize;
             var articles = categoryId == null
                 ? await _unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted, a => a.Category, i => i.Image, u => u.User)
-                : await _unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted,
-                    a => a.Category, i => i.Image, u => u.User);
+                : await _unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted,a => a.Category, i => i.Image, u => u.User);
             var sortedArticles = isAscending
-                ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
-                : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                ? articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+                : articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             return new ArticleListDto
             {
                 Articles = sortedArticles,
@@ -160,8 +160,41 @@ namespace YoutubeBlog.Service.Services.Conrete
                 CurrentPage = currentPage,
                 PageSize = pageSize,
                 TotalCount = articles.Count,
+                IsAscending = isAscending,
+                
+
+            };
+        }
+
+        public async Task<ArticleDto> GetArticleWithCategoryNonDeletedAsync(Guid articleId)
+        {
+
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category, i => i.Image, u => u.User);
+            var map = _mapper.Map<ArticleDto>(article);
+
+            return map;
+        }
+
+
+        public async Task<ArticleListDto> SearchAsync(string keyword, int currentPage = 1, int pageSize = 3, bool isAscending = false)
+        {
+            pageSize = pageSize > 20 ? 20 : pageSize;
+            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(
+                a => !a.IsDeleted && (a.Title.Contains(keyword) || a.Content.Contains(keyword) || a.Category.Name.Contains(keyword)),
+            a => a.Category, i => i.Image, u => u.User);
+
+            var sortedArticles = isAscending
+                ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+                : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            return new ArticleListDto
+            {
+                Articles = sortedArticles,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
                 IsAscending = isAscending
             };
         }
+
     }
 }

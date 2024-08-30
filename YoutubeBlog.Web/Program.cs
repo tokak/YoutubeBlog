@@ -6,6 +6,7 @@ using YoutubeBlog.Data.Extensions;
 using YoutubeBlog.Entity.Entities;
 using YoutubeBlog.Service.Describers;
 using YoutubeBlog.Service.Extensions;
+using YoutubeBlog.Web.Filters.ArticleVisitors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,10 @@ builder.Services.ConfigureApplicationCookie(config =>
 });
 
 // Add services to the container.
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(opt =>
+{
+    opt.Filters.Add<ArticleVisitorFilter>();
+})
     .AddNToastNotifyToastr(new ToastrOptions()
     {
         PositionClass = ToastPositions.TopRight,

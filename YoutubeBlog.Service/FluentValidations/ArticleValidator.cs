@@ -15,8 +15,8 @@ namespace YoutubeBlog.Service.FluentValidations
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .NotNull()
-                .MinimumLength(3)
-                .MaximumLength(150)
+                .MinimumLength(2)
+                .MaximumLength(100)
                 .WithName("Başlık");
 
 
@@ -24,7 +24,7 @@ namespace YoutubeBlog.Service.FluentValidations
                 .NotEmpty()
                 .NotNull()
                 .MinimumLength(3)
-                .MaximumLength(150)
+                .MaximumLength(750)
                 .WithName("İçerik");
                 
         }

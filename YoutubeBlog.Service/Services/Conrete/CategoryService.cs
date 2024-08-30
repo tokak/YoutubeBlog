@@ -105,5 +105,13 @@ namespace YoutubeBlog.Service.Services.Conrete
 
             return category.Name;
         }
+
+        public async Task<List<CategoryDto>> GetAllCategoriesNonDeletedTake24()
+        {
+            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
+            var map = _mapper.Map<List<CategoryDto>>(categories);
+
+            return map.Take(24).ToList();
+        }
     }
 }

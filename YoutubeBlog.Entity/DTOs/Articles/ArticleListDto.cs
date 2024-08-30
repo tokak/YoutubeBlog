@@ -19,6 +19,8 @@ namespace YoutubeBlog.Entity.DTOs.Articles
         public virtual bool ShowNext => CurrentPage < TotalPages;
         public virtual bool IsAscending { get; set; } = false;
 
+        //public IList<Image> Images { get; set; }
+
 
 
 
