@@ -37,5 +37,16 @@ namespace YoutubeBlog.Service.Services.Conrete
             return datas;
 
         }
+        public async Task<int> GetTotalArticleCounts()
+        {
+            var articleCount = await _unitOfWork.GetRepository<Article>().CountAsync();
+            return articleCount;
+        }
+
+        public async Task<int> GetTotalCategoryCounts()
+        {
+            var categoryCount = await _unitOfWork.GetRepository<Category>().CountAsync();
+            return categoryCount;
+        }
     }
 }

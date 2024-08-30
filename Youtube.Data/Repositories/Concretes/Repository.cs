@@ -28,7 +28,7 @@ namespace YoutubeBlog.Data.Repositories.Concretes
         /// <param name="predicate">Filtreleme işlemi için kullanılan lambda ifadesi. Eğer null ise tüm kayıtlar döndürülür.</param>
         /// <param name="includeProperties">Sorguya dahil edilmek istenen ilişkili tablolar.</param>
         /// <returns>Koşula uyan kayıtların bir listesini asenkron olarak döndürür.</returns>
-        public async Task<List<T>> GetAllAsync(Expression<Func<T,bool>> predicate = null,params Expression<Func<T, object>>[] includeProperties)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = Table;
             if (predicate != null)
@@ -38,7 +38,7 @@ namespace YoutubeBlog.Data.Repositories.Concretes
                 foreach (var item in includeProperties)
                     query = query.Include(item);
             return await query.ToListAsync();
-            
+
         }
 
         public async Task AddAsync(T entity)
@@ -50,7 +50,7 @@ namespace YoutubeBlog.Data.Repositories.Concretes
         {
             IQueryable<T> query = Table;
             query = query.Where(predicate);
-                
+
             if (includeProperties.Any())
                 foreach (var item in includeProperties)
                     query = query.Include(item);
@@ -81,7 +81,10 @@ namespace YoutubeBlog.Data.Repositories.Concretes
 
         public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
         {
-            return await Table.CountAsync(predicate);
+            if (predicate != null)
+                return await Table.CountAsync(predicate);
+            else
+                return await Table.CountAsync();
         }
     }
 }
